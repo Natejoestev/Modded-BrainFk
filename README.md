@@ -12,11 +12,11 @@ new:
 `;` add the byte itself of current idx to the output string  
 `$` reset the output string (set to empty/blank)  
 `~` subtract next:  
-`[A, B] >> [A, B-A]`
-` ^     >>  ^`
+`[A, B] >> [A, B-A]`  
+` ^     >>  ^`  
 `#` length of the bytes at current idx:  
-`[A, 0] >> [A, len(A)]`
-` ^     >>     ^`
+`[A, 0] >> [A, len(A)]`  
+` ^     >>     ^`  
  any other character is not delt with (comment)  
  
  # the Output String  
