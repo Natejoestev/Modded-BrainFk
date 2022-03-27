@@ -26,3 +26,13 @@ new:
  # how to run
  CMD `python ModdedBrainFK.py` to open console  
  CMD `python ModdedBrainFK.py FILE.EXT` runs code in that file
+
+# License
+Credit: [Natejoestev](https://github.com/Natejoestev)
+Bassed off of: [BrainFk](https://esolangs.org/wiki/Brainfuck)
+Language: [Python](https://www.python.org/)
+
+Crediting:
+ if you use this for a Video, Stream, Program, Repo, System, etc. please credit Me @Natejoestev
+ you are allowed to View, Revive, and Pull this repo
+ 
