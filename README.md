@@ -13,10 +13,10 @@ new:
 `$` reset the output string (set to empty/blank)  
 `~` subtract next:  
 `[A, B] >> [A, B-A]`  
-` ^     >>  ^`  
+` idx 1 >> keep same ix`  
 `#` length of the bytes at current idx:  
 `[A, 0] >> [A, len(A)]`  
-` ^     >>     ^`  
+` idx 1 >> idx goes to next +1`  
  any other character is not delt with (comment)  
  
  # the Output String  
