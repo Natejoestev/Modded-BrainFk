@@ -1,3 +1,4 @@
+<pre>
 # Modded-BrainFk
 BrainFk modded
 Based off of Esolang BrainFk: [BrainFk](https://esolangs.org/wiki/Brainfuck)
@@ -25,3 +26,4 @@ new:
  # how to run
  CMD `python ModdedBrainFK.py` to open console  
  CMD `python ModdedBrainFK.py FILE.EXT` runs code in that file
+</pre>
