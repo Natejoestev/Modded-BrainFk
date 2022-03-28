@@ -26,7 +26,13 @@ when the output string is updated: console is cleared then prints the output str
 # how to run
 CMD `python ModdedBrainFK.py` to open console  
 CMD `python ModdedBrainFK.py FILE.EXT` runs code in that file
-  
+
+# errors
+if you run some code and the interpretur crashes plece make an issue on this repo including:
+1. a screenshot of the error or just the error itself as text,
+2. the code you ran
+and i will fix the error and update it
+
 # Credit
 Made by: [Natejoestev](https://github.com/Natejoestev)  
 Bassed on: [BrainFk](https://esolangs.org/wiki/Brainfuck)  
