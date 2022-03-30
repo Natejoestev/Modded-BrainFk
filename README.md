@@ -17,6 +17,9 @@ new:
 `#` length of the bytes at current idx:  
 `[A, 0] >> [A, len(A)]`  
 ` idx 1 >> idx goes to next +1`  
+`*` toggle is function (start & end a function)  
+`/` call function at current idx  
+`@` print memory at current time  
 any other character is not delt with (comment)  
   
 # the Output String  
@@ -26,6 +29,13 @@ when the output string is updated: console is cleared then prints the output str
 # how to run
 CMD `python ModdedBrainFK.py` to open console  
 CMD `python ModdedBrainFK.py FILE.EXT` runs code in that file
+
+## Implementing in code
+Python:
+`from ModdedBrainFK import Code #import interpreter
+c = Code() #create the Base to run the code
+c.run(CODE) #run the code {CODE} (you can run this multiple times to run difrent code)
+c.prmem() #print memory (same as @)`
 
 # errors
 if you run some code and the interpretur crashes plece make an issue on this repo including:
