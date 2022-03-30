@@ -1,12 +1,15 @@
 
 #MODED BrainFK
 #<>+-[],.
-#; add value at index to output
-#$ clear output
-#~ [A, B] >> [A, B-A]
-#   ^         ^
-## [A, 0] >> [A, len(A)]
-#   ^            ^
+# ; add value at index to output
+# $ clear output
+# ~ [A, B] >> [A, B-A]
+#    ^         ^
+# # [A, 0] >> [A, len(A)]
+#    ^            ^
+# / call function at pointer
+# * toggle is function
+# @ print memory at current time
 
 import os
 import sys
@@ -16,54 +19,91 @@ def con(x):
 	if x<0: return 255
 	if x>255: return 0
 	return x
+def ERR(reason, code, i, c):
+	print("Error:", reason)
+	print(code)
+	print(" "*i+"^")
+	c.prmem()
+	exit()
 
-def run(code):
-	mem = [0]
-	p = 0
-	
-	o = ""
-	onscreen = ""
+class Func:
+	def __init__(self):
+		self.code = ""
+	def __repr__(self): return f"Func:\"{self.code}\""
 
-	loops = []
-	
-	i = 0
-	while i<len(code):
-		c = code[i]
-		if c==">":
-			p+=1
-			if len(mem)==p: mem.append(0)
-		elif c=="<": p-=1
-		elif c=="+": mem[p]=con(mem[p]+1)
-		elif c=="-": mem[p]=con(mem[p]-1)
-		elif c=="[": loops.append(i)
-		elif c=="]":
-			if mem[p]!=0: i=loops[-1]
-			else: del loops[-1]
-		elif c==",": mem[p]=ord(input("input: ")[0])
-		elif c==".": o+=chr(mem[p])
-		elif c==";": o+=str(mem[p])
-		elif c=="$": o=""
-		elif c=="#":
-			mem[p+1] = len(str(mem[p]))
-			p+=1
-		elif c=="~": mem[p+1] -= mem[p]
-		if onscreen != o:
-			os.system("cls")
-			onscreen=o
-			print(o)
-			time.sleep(.1)
-		i+=1
-	
-	print("Memery:")
-	print(", ".join([str(m) for m in mem]))
-	
+class Code:
+	def __init__(self):
+		self.mem = [0]
+		self.p = 0
+		self.o = ""
+		self.onscreen = ""
+		self.loops = []
+		self.isFnc = False
+	def prmem(self):
+		print("Memory:")
+		print(", ".join([str(m) for m in self.mem]))
+		o = 0
+		for i in range(self.p):
+			o+=len(str(self.mem[i]))+2
+		if isinstance(self.mem[self.p], Func): o+=2
+		print(" "*o+"^")
+	def run(self, code):
+		i = 0
+		def change(b):
+			if isinstance(self.mem[self.p], Func):
+				ERR(f"Can't add {b} to Function", code, i, self)
+			self.mem[self.p]=con(self.mem[self.p]+b)
+		while i<len(code):
+			c = code[i]
+			if c!="*" and self.isFnc:
+				self.mem[self.p].code += c
+			elif c==">":
+				self.p+=1
+				if len(self.mem)==self.p: self.mem.append(0)
+			elif c=="<": self.p-=1
+			elif c=="+": change(1)
+			elif c=="-": change(-1)
+			elif c=="[": self.loops.append(i)
+			elif c=="]":
+				if self.mem[self.p]!=0: i=self.loops[-1]
+				else: del self.loops[-1]
+			elif c==",": self.mem[p]=ord(input("input: ")[0])
+			elif c==".": self.o+=chr(self.mem[self.p])
+			elif c==";": self.o+=str(self.mem[self.p])
+			elif c=="$": self.o=""
+			elif c=="#":
+				if self.p+1==len(self.mem): self.mem.append(0)
+				self.mem[self.p+1] = len(str(self.mem[self.p]))
+				self.p+=1
+			elif c=="~": mem[self.p+1] -= self.mem[self.p]
+			elif c=="*":
+				if not self.isFnc:
+					self.mem[self.p] = Func()
+				self.isFnc = not self.isFnc
+			elif c=="/":
+				if not isinstance(self.mem[self.p], Func):
+					ERR("Can't run a number", code, i, self)
+				self.run(self.mem[self.p].code)
+			elif c=="@": self.prmem()
+			else: pass
+			if self.onscreen != self.o:
+				os.system("cls")
+				self.onscreen=self.o
+				print(self.o)
+				time.sleep(.1)
+			i+=1
+		#self.prmem()
 
 
 if __name__ == "__main__":
 	if len(sys.argv)>1:
 		with open(sys.argv[1], 'r') as f:
-			run(f.read().replace("\n", ""))
+			c = Code()
+			c.run(f.read().replace("\n", ""))
+			c.prmem()
 			exit()
 	while True:
 		code = input("> ")
-		run(code)
+		c = Code()
+		c.run(code)
+		c.prmem()
