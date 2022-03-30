@@ -1,0 +1,6 @@
+
+Multiply by two function
+*>[>++<-]>[<+>-]<<*
+useage:
+Memory:
+[Mul2fnc, X, 0] >> [Mull2fnc, X*2, 0]
