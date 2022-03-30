@@ -31,11 +31,12 @@ CMD `python ModdedBrainFK.py` to open console
 CMD `python ModdedBrainFK.py FILE.EXT` runs code in that file
 
 ## Implementing in code
-Python:
-`from ModdedBrainFK import Code #import interpreter
+Python:  
+```from ModdedBrainFK import Code #import interpreter
 c = Code() #create the Base to run the code
 c.run(CODE) #run the code {CODE} (you can run this multiple times to run difrent code)
-c.prmem() #print memory (same as @)`
+c.prmem() #print memory (same as @)
+```
 
 # errors
 if you run some code and the interpretur crashes plece make an issue on this repo including:
