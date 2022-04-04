@@ -10,6 +10,21 @@
 # / call function at pointer
 # * toggle is function
 # @ print memory at current time
+# | write the bytes of the next character in the code to pointer
+# !
+# " save value at pointer to Use Storage
+# ' write value of Use Storage to pointer
+# = [A, B] >> [A, B]
+#    ^         ^
+#run function B if Use Storage == A
+#
+#[A, B, C] >> [A, B, C]
+#    ^            ^
+#run function C if A==B
+# ! terminate
+
+# ^ set memory pointer to value at index
+
 
 import os
 import sys
@@ -39,7 +54,9 @@ class Code:
 		self.onscreen = ""
 		self.loops = []
 		self.isFnc = False
+		self.use = 0
 	def prmem(self):
+		print("Use:", self.use)
 		print("Memory:")
 		print(", ".join([str(m) for m in self.mem]))
 		o = 0
@@ -65,17 +82,22 @@ class Code:
 			elif c=="-": change(-1)
 			elif c=="[": self.loops.append(i)
 			elif c=="]":
+				if len(self.loops)==0:
+					ERR("Can't end a loop that wasn't started", code, i, self)
 				if self.mem[self.p]!=0: i=self.loops[-1]
 				else: del self.loops[-1]
-			elif c==",": self.mem[p]=ord(input("input: ")[0])
+			elif c==",": self.mem[self.p]=ord(input("input: ")[0])
 			elif c==".": self.o+=chr(self.mem[self.p])
 			elif c==";": self.o+=str(self.mem[self.p])
 			elif c=="$": self.o=""
 			elif c=="#":
-				if self.p+1==len(self.mem): self.mem.append(0)
+				#if self.p+1==len(self.mem): self.mem.append(0)
 				self.mem[self.p+1] = len(str(self.mem[self.p]))
 				self.p+=1
-			elif c=="~": mem[self.p+1] -= self.mem[self.p]
+			elif c=="~":
+				if len(self.mem)-self.p<2:
+					ERR("Can't index next in memory", code, i, self)
+				self.mem[self.p+1] -= self.mem[self.p]
 			elif c=="*":
 				if not self.isFnc:
 					self.mem[self.p] = Func()
@@ -83,8 +105,32 @@ class Code:
 			elif c=="/":
 				if not isinstance(self.mem[self.p], Func):
 					ERR("Can't run a number", code, i, self)
-				self.run(self.mem[self.p].code)
-			elif c=="@": self.prmem()
+				r = self.run(self.mem[self.p].code)
+				#if r=="T":
+				#	print(r)
+				#	return r
+			elif c=="@":
+				self.prmem()
+				input("Done looking at memory?")
+			elif c=="|":
+				i+=1
+				self.mem[self.p] = ord(code[i])
+			elif c=="\"": self.use = self.mem[self.p]
+			elif c=="'": self.mem[self.p] = self.use
+			elif c=="=":
+				if len(self.mem)-self.p<2: #3:
+					ERR("Can't index next in memory", code, i, self)
+				a = self.use #self.mem[self.p]
+				b = self.mem[self.p] #+1
+				c = self.mem[self.p+1] #+2
+				if a==b:
+					if not isinstance(c, Func):
+						ERR("Can't run a number", code, i, self)
+					self.run(c.code)
+			elif c=="!": #return "T"
+				print("TERMINATE")
+				self.prmem()
+				exit()
 			else: pass
 			if self.onscreen != self.o:
 				os.system("cls")
