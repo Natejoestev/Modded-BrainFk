@@ -22,8 +22,29 @@
 #    ^            ^
 #run function C if A==B
 # ! terminate
+# % floor half
+#[A, 0] >> [A, floor(A/2)]
+# ^             ^
+# : move
+#[A, 0] >> [0, A]
+# ^            ^
+# ` write the number of input to pointer
+# ? get string input
+#[Func, c]
+#  ^      
+#when the function is run pointer is at c
+#loops through all characters in the string:
+#  sets c to the bytes of the character
+#  runs Func for each character
 
 # ^ set memory pointer to value at index
+# loops???
+# multi char input "_"
+#[Func, A]
+#  ^
+# for each char in input:
+#   run func
+#   A = char
 
 
 import os
@@ -70,6 +91,11 @@ class Code:
 			if isinstance(self.mem[self.p], Func):
 				ERR(f"Can't add {b} to Function", code, i, self)
 			self.mem[self.p]=con(self.mem[self.p]+b)
+		def intager(a):
+			b = ""
+			for c in a:
+				if c in "0123456789": b+=c
+			return 0 if len(b)==0 else int(b)
 		while i<len(code):
 			c = code[i]
 			if c!="*" and self.isFnc:
@@ -91,7 +117,7 @@ class Code:
 			elif c==";": self.o+=str(self.mem[self.p])
 			elif c=="$": self.o=""
 			elif c=="#":
-				#if self.p+1==len(self.mem): self.mem.append(0)
+				if self.p+1==len(self.mem): self.mem.append(0)
 				self.mem[self.p+1] = len(str(self.mem[self.p]))
 				self.p+=1
 			elif c=="~":
@@ -131,6 +157,28 @@ class Code:
 				print("TERMINATE")
 				self.prmem()
 				exit()
+			elif c=="%":
+				self.p+=1
+				if isinstance(self.mem[self.p-1], Func): ERR("Can't half a Function", code, i, self)
+				self.mem[self.p]=floor(self.mem[self.p-1]/2)
+			elif c==":":
+				self.mem[self.p+1]=self.mem[self.p]
+				self.mem[self.p]=0
+				self.p+=1
+			elif c=="`":
+				v = intager(input("Intager: "))
+				self.mem[self.p]=v
+				print(f"Registerd as: {v}")
+			elif c=="?":
+				if not isinstance(self.mem[self.p], Func):
+					ERR("Can't run a non function", code, i, self)
+				if len(self.mem)-1==self.p:self.mem.append(0)
+				idx = int(self.p)
+				s = input("String: ")
+				for c in s:
+					self.p=idx+1
+					self.mem[idx+1] = ord(c)
+					self.run(self.mem[idx].code)
 			else: pass
 			if self.onscreen != self.o:
 				os.system("cls")
