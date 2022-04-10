@@ -27,8 +27,22 @@ new:
 `[A, B] >> [A, B]`  
 ` idx 1 >> keep same idx`  
 `!` terminate program  
+`%` floor half  
+`[A, 0] >> [A, floor(A/2)]`  
+`idx 1 >> idx goes to next +1`  
+`:` move  
+`[A, 0] >> [0, A]`  
+` idx 1 >> idx goes to next +1`  
+\` write the number of input to pointer  
+`?` get string input  
+`[Func, c]`  
+`idx 1`  
+when the function is run; pointer is at c  
+loops through all characters in the string:  
+  sets c to the bytes of the character  
+  runs Func for each character  
 any other character is not delt with (comment)
-  
+
 # the Output String
 how the outputs work is; in back end there is a string called output.  
 when the output string is updated: console is cleared then prints the output string  
